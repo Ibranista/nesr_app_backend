@@ -8,6 +8,8 @@ router.post(AUTH_ROUTE_NAMES.AUTH, authUser)
     .post('/', authUser)
     .post(AUTH_ROUTE_NAMES.LOGOUT, logoutUser)
     .post(AUTH_ROUTE_NAMES.REGISTER, registerUser)
-    .route(AUTH_ROUTE_NAMES.PROFILE).get(getUserProfile).put(updateUserProfile);
+    .route(AUTH_ROUTE_NAMES.PROFILE)
+    .get(getUserProfile)
+    .put(updateUserProfile);
 
 export default router;
