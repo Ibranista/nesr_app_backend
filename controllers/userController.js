@@ -7,7 +7,7 @@ import generateToken from '../utils/generateToken.js';
 // @access  Public
 
 export const registerUser = asyncHandler(async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, address } = req.body;
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -18,6 +18,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     const user = await User.create({
         name,
         email,
+        address,
         password
     });
 
@@ -26,7 +27,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         res.status(201).json({
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            address
         });
     } else {
         res.status(400);
@@ -36,11 +38,17 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Auth user & get token
-// @route   POST /api/users/auth
+// @route   POST /api/users/auth/login
 // @access  Public
 
-export const authUser = asyncHandler(async (req, res, next) => {
+export const loginUser = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
+    const token = req.cookies.jwt;
+
+    if (token) {
+        res.status(400);
+        throw new Error('User already logged in');
+    }
 
     const user = await User.findOne({ email });
 
@@ -49,7 +57,8 @@ export const authUser = asyncHandler(async (req, res, next) => {
         res.status(201).json({
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            address: user.address
         });
     } else {
         res.status(401);

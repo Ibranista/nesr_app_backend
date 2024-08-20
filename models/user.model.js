@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { AddressModel } from "./shared/Schemas.js";
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    address: {
+        type: AddressModel,
     },
     email: {
         type: String,
