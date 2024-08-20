@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/user.model.js';
+import generateToken from '../utils/generateToken.js';
 // register user
 // @desc    Register a new user
 // @route   POST /api/users
@@ -21,6 +22,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     });
 
     if (user) {
+        generateToken(res, user._id);
         res.status(201).json({
             _id: user._id,
             name: user.name,
@@ -38,13 +40,22 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 // @access  Public
 
 export const authUser = asyncHandler(async (req, res, next) => {
-    try {
-        res.status(501).json({ message: 'Not Implemented' });
-    } catch (error) {
-        // Send the error message as a response to the client
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user && (await user.matchPassword(password))) {
+        generateToken(res, user._id);
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email
+        });
+    } else {
         res.status(401);
-        throw new Error('Not Authorized');
+        throw new Error('Invalid user data');
     }
+
 });
 
 
@@ -55,7 +66,8 @@ export const authUser = asyncHandler(async (req, res, next) => {
 
 export const logoutUser = asyncHandler(async (req, res, next) => {
     try {
-        res.status(501).json({ message: 'Not Implemented' });
+        res.cookie('jwt', '', { httpOnly: true, expires: new Date(0) });
+        res.status(200).json({ message: 'User logged out' });
     } catch (error) {
         // Send the error message as a response to the client
         res.status(401);

@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { userRoutes } from './routes/routes.js';
 import connectDB from './config/db.js';
+import cookieParser from 'cookie-parser';
+
 const { json, urlencoded } = express;
 
 dotenv.config();
@@ -12,6 +14,7 @@ const port = process.env.PORT || 5000;
 connectDB();
 const app = express();
 app.use(json());
+app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
 // const loggerMiddleware = (req, res, next) => {
