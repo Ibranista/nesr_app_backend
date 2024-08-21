@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
     address: {
         type: AddressModel,
     },
+    sex: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,
@@ -22,6 +26,15 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    picture: {
+        type: String,
+        default: function () {
+            // Check the value of 'sex' and return the appropriate URL
+            return this.sex === 'female'
+                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtbTQRrYgXgiE6Icbs3Gzdq5T8CEQ1lhQXug&s"
+                : "https://www.svgrepo.com/show/61986/avatar.svg";
+        }
     }
 }, {
     timestamps: true
