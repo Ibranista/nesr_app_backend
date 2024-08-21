@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/user.model.js';
+import FundedUser from '../models/fundedUser.model.js';
 import generateToken from '../utils/generateToken.js';
 // register user
 // @desc    Register a new user
@@ -37,9 +38,73 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 
 });
 
+// const createAdminUser = asyncHandler(async (req, res, next) => {
+//     const adminUserData = {
+//         name: 'Ibraheem Khedir',
+//         email: 'techofreact@gmail.com',
+//         password: '123456',
+//         role: 'admin',
+//         sex: 'male'
+//     };
+
+//     const userExists = await User.findOne({ email: adminUserData.email });
+
+//     if (userExists) {
+//         res.status(400);
+//         throw new Error('Admin already exists');
+//     };
+
+//     await User.create(adminUserData);
+// });
+
+// createAdminUser();
+
 // @desc    Auth user & get token
 // @route   POST /api/users/auth/login
 // @access  Public
+
+export const registerUserTobeFunded = asyncHandler(async (req, res, next) => {
+    const role = req.user.role;
+
+    if (role !== 'admin') {
+        res.status(401);
+        throw new Error('Only Admins can register users to be funded!');
+    }
+
+    const {
+        name,
+        hasFamily,
+        sex,
+        address,
+        specificNeeds
+    } = req.body;
+
+    const funded_user = await FundedUser.create({
+        name,
+        hasFamily,
+        sex,
+        address,
+        specificNeeds,
+        createdBy: req.user._id
+    });
+
+    if (funded_user) {
+        res.status(201).json({
+            _id: funded_user._id,
+            name: funded_user.name,
+            hasFamily: funded_user.hasFamily,
+            sex: funded_user.sex,
+            address: funded_user.address,
+            specificNeeds: funded_user.specificNeeds,
+            createdBy: funded_user.createdBy
+        });
+    }
+
+    // update the user who created the funded user to include the funded user in their list of registered funded users
+    const user = await User.findById(req.user._id);
+    user.registered_funded_users_by_admin.push(funded_user._id);
+
+});
 
 export const loginUser = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;

@@ -1,4 +1,4 @@
-import { AddressModel } from "./shared/Schemas";
+import { AddressModel } from "./shared/Schemas.js";
 import mongoose from 'mongoose';
 
 const fundedUserSchema = new mongoose.Schema({
@@ -34,7 +34,11 @@ const fundedUserSchema = new mongoose.Schema({
         type: Map,
         of: String,
         required: true
-    }
+    },
+    createdBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
 });
 
 const FundedUser = mongoose.model('FundedUser', fundedUserSchema);
