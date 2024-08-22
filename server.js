@@ -1,4 +1,7 @@
 import express from 'express';
+import AdminBro from 'admin-bro';
+import { options } from './config/admin.options.js';
+
 import dotenv from 'dotenv';
 import { userRoutes } from './routes/routes.js';
 import connectDB from './config/db.js';
@@ -9,6 +12,7 @@ const { json, urlencoded } = express;
 dotenv.config();
 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { buildAdminRouter } from './routes/admin.router.js';
 const port = process.env.PORT || 5000;
 
 connectDB();
@@ -34,4 +38,16 @@ app.get('/', (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(port, () => console.log(`running on port ${port}`));
+
+const run = async () => {
+    try {
+        const admin = new AdminBro(options);
+        const router = buildAdminRouter(admin);
+        app.use(admin.options.rootPath, router);
+        app.listen(port, () => console.log(`running on port ${port}`));
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+run();
