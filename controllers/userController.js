@@ -39,7 +39,50 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 // @route   POST /api/users/auth
 // @access  Public
 
-export const authUser = asyncHandler(async (req, res, next) => {
+export const registerUserTobeFunded = asyncHandler(async (req, res, next) => {
+    // const role = req.user.role;
+
+    // if (role !== 'admin') {
+    //     res.status(401);
+    //     throw new Error('Only Admins can register users to be funded!');
+    // }
+
+    const {
+        name,
+        hasFamily,
+        sex,
+        address,
+        specificNeeds
+    } = req.body;
+
+    const funded_user = await FundedUser.create({
+        name,
+        hasFamily,
+        sex,
+        address,
+        specificNeeds,
+        createdBy: req.user._id
+    });
+
+    if (funded_user) {
+        res.status(201).json({
+            _id: funded_user._id,
+            name: funded_user.name,
+            hasFamily: funded_user.hasFamily,
+            sex: funded_user.sex,
+            address: funded_user.address,
+            specificNeeds: funded_user.specificNeeds,
+            createdBy: funded_user.createdBy
+        });
+    }
+
+    // update the user who created the funded user to include the funded user in their list of registered funded users
+    const user = await User.findById(req.user._id);
+    user.registered_funded_users_by_admin.push(funded_user._id);
+
+});
+
+export const loginUser = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });

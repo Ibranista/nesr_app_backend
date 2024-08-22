@@ -1,6 +1,20 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 
+const onlyAdminPrivilage = asyncHandler(async (req, res, next) => {
+    let role;
+
+    role = req.user.role;
+
+    if (role === 'admin') {
+        next();
+    } else {
+        res.status(401);
+        throw new Error('Not authorized, this is only for admins!');
+    }
+
+});
+
 const protect = asyncHandler(async (req, res, next) => {
     let token;
 
@@ -19,8 +33,8 @@ const protect = asyncHandler(async (req, res, next) => {
 
     if (!token) {
         res.status(401);
-        throw new Error('Not authorized, token missing');
+        throw new Error('Not Signed In!');
     }
 });
 
-export { protect };
+export { protect, onlyAdminPrivilage };
