@@ -1,19 +1,10 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { AddressModel } from "./shared/Schemas.js";
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
-    },
-    address: {
-        type: AddressModel,
-    },
-    sex: {
-        type: String,
-        enum: ['male', 'female'],
-        // required: true
     },
     email: {
         type: String,
@@ -27,25 +18,7 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    },
-    picture: {
-        type: String,
-        default: function () {
-            // Check the value of 'sex' and return the appropriate URL
-            return this.sex === 'female'
-                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtbTQRrYgXgiE6Icbs3Gzdq5T8CEQ1lhQXug&s"
-                : "https://www.svgrepo.com/show/61986/avatar.svg";
-        }
-    },
-    role: {
-        type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
-    },
-    registered_funded_users_by_admin: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'FundedUser',
-    }],
+    }
 }, {
     timestamps: true
 });

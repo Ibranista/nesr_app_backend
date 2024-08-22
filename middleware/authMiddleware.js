@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
-import User from '../models/user.model.js';
 
 const onlyAdminPrivilage = asyncHandler(async (req, res, next) => {
     let role;
@@ -18,18 +17,17 @@ const onlyAdminPrivilage = asyncHandler(async (req, res, next) => {
 
 const protect = asyncHandler(async (req, res, next) => {
     let token;
-    token = req.cookies.jwt;
 
-    if (token) {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
+            token = req.headers.authorization.split(' ')[1];
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const user = await User.findById(decoded.userID).select('-password');
-            req.user = user;
+            // req.userID = decoded.userID;
+            req.user = await User.findById(decoded.userID).select('-password');
             next();
         } catch (error) {
-            console.log('error==>', error)
             res.status(401);
-            throw new Error('Not authorized, token verification failed ' + error);
+            throw new Error('Not authorized, token verification failed');
         }
     }
 
