@@ -1,7 +1,6 @@
-
-// @type {AdminBro.AdminBroOptions}
+/** @type {import('admin-bro').AdminBroOptions} */
 const options = {
-    rootPath: '/admin',
+    // resources: [Company],
 };
 
 export { options };
