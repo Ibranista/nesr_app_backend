@@ -64,12 +64,12 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 // @access  Public
 
 export const registerUserTobeFunded = asyncHandler(async (req, res, next) => {
-    const role = req.user.role;
+    // const role = req.user.role;
 
-    if (role !== 'admin') {
-        res.status(401);
-        throw new Error('Only Admins can register users to be funded!');
-    }
+    // if (role !== 'admin') {
+    //     res.status(401);
+    //     throw new Error('Only Admins can register users to be funded!');
+    // }
 
     const {
         name,

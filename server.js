@@ -22,9 +22,13 @@ app.use(urlencoded({ extended: true }));
 //     next();
 // };
 
+// const secondLogger = (req, res, next) => {
+//     res.send('Second logger');
+// };
 
-app.use('/api/users', userRoutes);
+// app.use('/logger', loggerMiddleware, secondLogger);
 // app.use(loggerMiddleware);
+app.use('/api/users', userRoutes);
 
 
 app.get('/', (req, res) => {
