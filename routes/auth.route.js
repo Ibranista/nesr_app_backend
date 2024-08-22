@@ -1,8 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import { loginUser, getUserProfile, logoutUser, registerUser, updateUserProfile, registerUserTobeFunded } from '../controllers/userController.js';
 import { AUTH_ROUTE_NAMES } from '../constants/auth.js';
 import { protect } from '../middleware/authMiddleware.js';
-
 const router = express.Router();
 
 router
