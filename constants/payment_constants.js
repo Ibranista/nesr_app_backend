@@ -3,5 +3,7 @@ export const PAYMENT_CONSTANTS = {
     STRIPE_CONFIG: '/config',
     STRIPE_WEBHOOK: '/webhook',
     STRIPE_PAYMENT_INTENT: '/payment-intent',
-    STRIPE_CONFIRM_PAYMENT: '/confirm-payment'
+    STRIPE_CONFIRM_PAYMENT: '/confirm-payment',
+
+    CHAPA_INITIALIZE_TRANSACTION: '/initialize_transaction',
 }
