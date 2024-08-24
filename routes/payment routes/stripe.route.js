@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import { PAYMENT_CONSTANTS } from '../constants/payment_constants.js';
-import { confirm_payment, create_payment_intent, serve_publishable_key, serve_static } from '../controllers/stripeController.js';
+import { PAYMENT_CONSTANTS } from '../../constants/payment_constants.js';
+import { confirm_payment, create_payment_intent, serve_publishable_key, serve_static } from '../../controllers/payment related/stripeController.js';
 
 const router = express.Router();
 

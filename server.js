@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 dotenv.config();
-import { userRoutes, stripeRoutes } from './routes/routes.js';
+import { userRoutes, stripeRoutes, chapaRoutes } from './routes/routes.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/stripe', stripeRoutes);
-
+app.use('/api/chapa', chapaRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World');
