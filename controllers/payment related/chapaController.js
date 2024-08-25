@@ -1,5 +1,5 @@
 import expressAsyncHandler from "express-async-handler";
-import { generate_random_unique_id } from "../../utils/utils";
+import { generate_random_unique_id } from "../../utils/utils.js";
 const transaction_url = process.env.CHAPA_INITIALIZE_TRANSACTION_URL;
 const chapa_secret_key = process.env.CHAPA_SECRET_KEY;
 
